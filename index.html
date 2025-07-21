@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CDP 개발직군 셀프 체크리스트</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #5a67d8;
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .section-title {
+            color: #5a67d8;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            font-weight: 600;
+            border-bottom: 3px solid #5a67d8;
+            padding-bottom: 10px;
+        }
+
+        .job-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .job-option {
+            padding: 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            background: #f8fafc;
+        }
+
+        .job-option:hover {
+            border-color: #5a67d8;
+            background: #edf2f7;
+        }
+
+        .job-option.selected {
+            border-color: #5a67d8;
+            background: #5a67d8;
+            color: white;
+        }
+
+        .question-card {
+            margin-bottom: 25px;
+            padding: 25px;
+            border-left: 5px solid #5a67d8;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .question-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2d3748;
+        }
+
+        .score-options {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .score-option {
+            padding: 15px 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .score-option:hover {
+            border-color: #5a67d8;
+            background: #edf2f7;
+        }
+
+        .score-option.selected {
+            border-color: #5a67d8;
+            background: #5a67d8;
+            color: white;
+        }
+
+        .score-label {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 5px;
+        }
+
+        .score-desc {
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .experience-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1em;
+            resize: vertical;
+            min-height: 100px;
+            margin-top: 10px;
+        }
+
+        .experience-input:focus {
+            outline: none;
+            border-color: #5a67d8;
+        }
+
+        .experience-input.error {
+            border-color: #e53e3e;
+            background-color: #fed7d7;
+        }
+
+        .progress-bar-container {
+            background: #e2e8f0;
+            border-radius: 10px;
+            height: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .page-info {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .nav-btn.secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .nav-btn.secondary:hover:not(:disabled) {
+            background: #cbd5e0;
+        }
+
+        .results {
+            display: none;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .summary-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .summary-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .skill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 5px solid #5a67d8;
+        }
+
+        .skill-name {
+            font-weight: 600;
+        }
+
+        .skill-score {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #5a67d8;
+        }
+
+        .recommendations {
+            background: #fff5f5;
+            border: 2px solid #fed7d7;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .recommendations h3 {
+            color: #c53030;
+            margin-bottom: 15px;
+        }
+
+        .recommendations ul {
+            padding-left: 20px;
+        }
+
+        .recommendations li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .required-indicator {
+            color: #e53e3e;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .score-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .job-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .navigation-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>CDP 개발직군 셀프 체크리스트</h1>
+            <p>본 체크리스트는 직군별 갖추어야 할 주요 스킬을 스스로 점검할 수 있는 문항으로 구성되어 있습니다.<br>
+            응답결과는 응답자 본인과 직책자에게만 공유되며, 향후 목표수립과 교육제도 설계 시 참고 자료로 활용됩니다.</p>
+        </div>
+
+        <div id="job-selection" class="card">
+            <div class="section-title">직무 선택</div>
+            <p style="margin-bottom: 20px; color: #666;">본인의 직무를 선택해주세요. (이전 경험이나 앞으로의 성장 관점에서 확인하고 싶은 직무를 선택해도 무방합니다.)</p>
+            <div class="job-options">
+                <div class="job-option" data-job="fullstack">
+                    <div style="font-weight: bold; margin-bottom: 10px;">풀스택 개발자</div>
+                    <div style="font-size: 0.9em;">백엔드 + 프론트엔드 + 직무공통<br>(총 13문항)</div>
+                </div>
+                <div class="job-option" data-job="backend">
+                    <div style="font-weight: bold; margin-bottom: 10px;">백엔드 개발자</div>
+                    <div style="font-size: 0.9em;">백엔드 + 직무공통<br>(총 8문항)</div>
+                </div>
+                <div class="job-option" data-job="frontend">
+                    <div style="font-weight: bold; margin-bottom: 10px;">프론트엔드 개발자</div>
+                    <div style="font-size: 0.9em;">프론트엔드 + 직무공통<br>(총 8문항)</div>
+                </div>
+            </div>
+            <div class="navigation-buttons">
+                <button type="button" class="nav-btn" id="start-btn" disabled onclick="startAssessment()">
+                    평가 시작하기
+                </button>
+            </div>
+        </div>
+
+        <div id="assessment-form" style="display: none;">
+            <div class="card">
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <div class="page-info" id="page-info"></div>
+                
+                <div id="questions-container"></div>
+
+                <div class="navigation-buttons">
+                    <button type="button" class="nav-btn secondary" id="prev-btn" onclick="previousPage()" disabled>
+                        이전
+                    </button>
+                    <button type="button" class="nav-btn" id="next-btn" onclick="nextPage()">
+                        다음
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="results" class="results">
+            <div class="card">
+                <div class="section-title">🎯 개인별 역량 분석 결과</div>
+                <div id="results-content"></div>
+                <button type="button" class="nav-btn" onclick="restart()" style="margin-top: 30px;">
+                    새로운 평가 시작하기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questionData = {
+            backend: [
+                {
+                    id: 'backend1',
+                    title: 'Java, Python, Golang, TypeScript, JavaScript 중 최소 2개 이상의 언어를 능숙하게 사용할 수 있다.',
+                    category: '프로그래밍 언어',
+                    scores: [
+                        '언어의 기본적인 문법과 개념을 잘 알지 못함',
+                        '최소 1개 언어의 기본 문법을 이해',
+                        '2개 이상의 언어를 실무에서 사용한 경험',
+                        '2개 이상의 언어를 고급 수준으로 활용',
+                        '2개 이상의 언어에 대한 전문성을 갖추고 기술적 리더 역할'
+                    ]
+                },
+                {
+                    id: 'backend2',
+                    title: 'Spring Boot, Next.js와 같은 프레임워크를 다룬 경험이 있다.',
+                    category: '프레임워크',
+                    scores: [
+                        '프레임워크를 사용한 경험이 없음',
+                        '프레임워크의 개념은 알고 있지만 사용 경험이 거의 없음',
+                        '간단한 프로젝트나 기능 개발 경험',
+                        '실무 프로젝트에서 주요 기능 개발 경험',
+                        '대규모 시스템 설계 및 개발, 고급 기능 활용 경험'
+                    ]
+                },
+                {
+                    id: 'backend3',
+                    title: '프레임워크의 기본 동작 원리를 이해하고, 최적화된 개발 환경을 구축한 경험이 있다.',
+                    category: '개발환경',
+                    scores: [
+                        '프레임워크의 기본 동작 원리를 이해하지 못함',
+                        '기본 동작 원리를 일부 이해하나 환경 구축 경험 부족',
+                        '동작 원리를 기본적으로 이해하고 개발 환경 설정 경험',
+                        '여러 프로젝트에서 최적화된 개발 환경 구축 경험',
+                        '동작 원리를 깊이 이해하고 고급 설정 및 라이브러리 활용'
+                    ]
+                },
+                {
+                    id: 'backend4',
+                    title: 'RESTful API 설계 및 개발 경험이 있다.',
+                    category: 'API 설계',
+                    scores: [
+                        'RESTful API 설계 및 개발 경험이 없음',
+                        '간단한 API 설계 및 CRUD 기능 구현 가능',
+                        'RESTful API 설계하고 인증, 권한, 상태 코드 활용',
+                        '고급 기능을 통합한 효율적이고 확장성 있는 API 설계',
+                        '대규모 시스템에서 API 설계 주도 및 조직 내 표준화'
+                    ]
+                },
+                {
+                    id: 'backend5',
+                    title: '외부 및 내부 시스템과의 통합연동을 위한 API 설계 및 구현 경험이 있다.',
+                    category: '시스템 연동',
+                    scores: [
+                        'API 연동 경험이 없고 기본 개념을 잘 이해하지 못함',
+                        '단순한 외부 API 호출 및 기본적인 인증 방식 사용',
+                        '외부 및 내부 시스템 간의 API 설계 및 구현 경험',
+                        '대규모 시스템의 확장성, 성능 최적화를 고려한 API 설계',
+                        '대규모 분산 시스템에서 복잡한 API 통합 연동 주도'
+                    ]
+                }
+            ],
+            frontend: [
+                {
+                    id: 'frontend1',
+                    title: 'JavaScript 사용에 능숙하다.',
+                    category: 'JavaScript',
+                    scores: [
+                        'JavaScript 기본 문법과 사용법에 익숙하지 않음',
+                        '기본적인 문법과 로직은 작성 가능하나 복잡한 처리는 미숙',
+                        '일반적인 개발 과제를 해결하고 ES6+ 문법 활용',
+                        'JavaScript의 동작 원리를 이해하고 복잡한 문제 해결',
+                        'JavaScript 전문가로서 최적화, 멘토링, 코드 품질 향상'
+                    ]
+                },
+                {
+                    id: 'frontend2',
+                    title: 'TypeScript를 활용한 프로젝트 경험이 있다.',
+                    category: 'TypeScript',
+                    scores: [
+                        'TypeScript 사용 경험이 거의 없고 개념 이해 부족',
+                        'TypeScript의 기본 문법을 이해하고 제한적으로 사용',
+                        '실무 프로젝트에서 TypeScript 사용하고 기본 타입 시스템 활용',
+                        'TypeScript를 대규모 프로젝트에 적용하고 고급 타입 활용',
+                        'TypeScript 전문가로 프로젝트 설계, 교육, 멘토링, 오픈소스 기여'
+                    ]
+                },
+                {
+                    id: 'frontend3',
+                    title: 'React 프레임워크 경험이 있다.',
+                    category: 'React',
+                    scores: [
+                        'React 프레임워크의 개념을 알지 못하고 실무 경험 없음',
+                        'React의 기본 개념을 이해하고 간단한 컴포넌트 작성',
+                        'React로 컴포넌트 설계하고 상태 관리, 라우팅 경험',
+                        'React로 복잡한 상태 관리 및 최적화, 다양한 기능 구현',
+                        'React 고급 기능 적용과 다양한 라이브러리 연동 경험'
+                    ]
+                },
+                {
+                    id: 'frontend4',
+                    title: 'HTML5의 웹 표준 및 시맨틱 태그를 이해하고 있다.',
+                    category: 'HTML5',
+                    scores: [
+                        'HTML5 기본 문법과 웹 표준, 시맨틱 태그 역할을 이해하지 못함',
+                        'HTML5의 기본 태그 사용하나 시맨틱 태그 활용이 미숙',
+                        '웹 표준과 시맨틱 태그를 실무에서 활용하고 기본 SEO 적용',
+                        '접근성과 SEO를 고려한 HTML5 설계와 크로스 브라우징 해결',
+                        'HTML5 표준과 시맨틱 태그 설계를 선도하고 프로젝트 표준화'
+                    ]
+                },
+                {
+                    id: 'frontend5',
+                    title: 'CSS3와 관련된 레이아웃, 애니메이션, 그리드 시스템을 이해하고 있다.',
+                    category: 'CSS3',
+                    scores: [
+                        'CSS의 기본 개념에 익숙하지 않고 레이아웃 설계에 어려움',
+                        '기본 레이아웃과 간단한 애니메이션 구현 가능하나 고급 기능은 미숙',
+                        'Flexbox와 CSS Grid 활용하고 트랜지션과 애니메이션으로 UI 개선',
+                        '복잡한 레이아웃 및 애니메이션 설계와 반응형 디자인에 능숙',
+                        'CSS3 전문가로 고급 레이아웃 설계, 성능 최적화, 팀 표준화'
+                    ]
+                }
+            ],
+            common: [
+                {
+                    id: 'common1',
+                    title: 'Git을 사용해 코드 버전 관리를 할 수 있다.',
+                    category: '버전 관리',
+                    scores: [
+                        'Git의 기본 개념을 이해하나 프로젝트에 사용한 경험 없음',
+                        '개인 실무에서 Git을 활용하고 간단한 충돌 해결 경험',
+                        '실무에서 팀원들과 협업하고 브랜치 전략 및 PR/MR 작업 수행',
+                        '대규모 프로젝트에서 Git 워크플로 설계 및 관리, CI/CD 통합',
+                        'Git 전문가로 오픈소스 기여, 교육, 조직과 업계 기여'
+                    ]
+                },
+                {
+                    id: 'common2',
+                    title: '변화하는 기술에 빠르게 적응하고 학습할 수 있는 능력이 있다.',
+                    category: '학습 능력',
+                    scores: [
+                        '기술 트렌드의 필요성을 인식하나 학습하거나 적용한 경험 없음',
+                        '새로운 기술을 학습하나 실무 프로젝트에 적용하지 못함',
+                        '새로운 기술을 빠르게 학습하고 실무 프로젝트에 적용하여 성과',
+                        '대규모 프로젝트에서 새로운 기술 도입하고 팀원들에게 전파',
+                        '기술 트렌드를 선도하고 조직 및 업계 기여, 글로벌 커뮤니티 영향력'
+                    ]
+                },
+                {
+                    id: 'common3',
+                    title: '클린 코드 작성 원칙을 이해하고 이를 실천하고 있다.',
+                    category: '코드 품질',
+                    scores: [
+                        '클린 코드 작성 원칙에 대한 이해와 경험이 없음',
+                        '클린 코드 원칙의 기본 개념을 이해하고 간단한 원칙 적용',
+                        '클린 코드 원칙을 적용하여 가독성과 유지보수성 향상',
+                        '대규모 프로젝트에서 클린 코드 원칙을 주도적으로 실천',
+                        '클린 코드 작성의 전문가로 조직 내 코드 품질 표준화 주도'
+                    ]
+                }
+            ]
+        };
+
+        let selectedJob = '';
+        let responses = {};
+        let allQuestions = [];
+        let currentPage = 0;
+        const questionsPerPage = 4;
+
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStartButton();
+        });
+
+        // 직무 선택 이벤트
+        document.addEventListener('click', function(e) {
+            const jobOption = e.target.closest('.job-option');
+            if (jobOption && !e.target.closest('.score-option')) {
+                selectedJob = jobOption.getAttribute('data-job');
+                
+                // UI 업데이트
+                document.querySelectorAll('.job-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                jobOption.classList.add('selected');
+                
+                updateStartButton();
+                return;
+            }
+            
+            // 점수 선택 이벤트
+            const scoreOption = e.target.closest('.score-option');
+            if (scoreOption) {
+                const questionId = scoreOption.getAttribute('data-question');
+                const score = parseInt(scoreOption.getAttribute('data-score'));
+                
+                // 같은 문항의 다른 선택 해제
+                document.querySelectorAll(`[data-question="${questionId}"].score-option`).forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                // 현재 선택 표시
+                scoreOption.classList.add('selected');
+                
+                // 응답 저장
+                if (!responses[questionId]) {
+                    responses[questionId] = {};
+                }
+                responses[questionId].score = score;
+                
+                // 카테고리 정보 찾기
+                const questionInfo = allQuestions.find(q => q.id === questionId);
+                if (questionInfo) {
+                    responses[questionId].category = questionInfo.category;
+                }
+                
+                // 에러 스타일 제거
+                const experienceInput = document.querySelector(`[data-question="${questionId}"].experience-input`);
+                if (experienceInput) {
+                    experienceInput.classList.remove('error');
+                }
+            }
+        });
+
+        // 경험 입력 이벤트
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('experience-input')) {
+                const questionId = e.target.getAttribute('data-question');
+                if (!responses[questionId]) {
+                    responses[questionId] = {};
+                }
+                responses[questionId].experience = e.target.value;
+                
+                // 에러 스타일 제거
+                if (e.target.value.trim() !== '') {
+                    e.target.classList.remove('error');
+                }
+            }
+        });
+
+        function updateStartButton() {
+            const startBtn = document.getElementById('start-btn');
+            startBtn.disabled = !selectedJob;
+        }
+
+        function startAssessment() {
+            // 문항 설정
+            if (selectedJob === 'fullstack') {
+                allQuestions = [...questionData.backend, ...questionData.frontend, ...questionData.common];
+            } else if (selectedJob === 'backend') {
+                allQuestions = [...questionData.backend, ...questionData.common];
+            } else if (selectedJob === 'frontend') {
+                allQuestions = [...questionData.frontend, ...questionData.common];
+            }
+            
+            // 응답 초기화
+            responses = {};
+            currentPage = 0;
+            
+            // 화면 전환
+            document.getElementById('job-selection').style.display = 'none';
+            document.getElementById('assessment-form').style.display = 'block';
+            
+            // 첫 페이지 표시
+            displayCurrentPage();
+        }
+
+        function displayCurrentPage() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+            
+            const startIndex = currentPage * questionsPerPage;
+            const endIndex = Math.min(startIndex + questionsPerPage, allQuestions.length);
+            const currentQuestions = allQuestions.slice(startIndex, endIndex);
+            
+            currentQuestions.forEach((question, index) => {
+                const questionNumber = startIndex + index + 1;
+                const questionCard = createQuestionCard(question, questionNumber);
+                container.appendChild(questionCard);
+            });
+            
+            updatePageInfo();
+            updateNavigationButtons();
+            updateProgressBar();
+        }
+
+        function createQuestionCard(question, questionNumber) {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            
+            // 기존 응답 확인
+            const existingResponse = responses[question.id];
+            const selectedScore = existingResponse ? existingResponse.score : null;
+            const existingExperience = existingResponse ? existingResponse.experience || '' : '';
+            
+            card.innerHTML = `
+                <div class="question-title">
+                    ${questionNumber}. ${question.title} <span class="required-indicator">*</span>
+                </div>
+                
+                <div class="score-options">
+                    ${question.scores.map((score, index) => `
+                        <div class="score-option ${selectedScore === index + 1 ? 'selected' : ''}" 
+                             data-score="${index + 1}" data-question="${question.id}">
+                            <div class="score-label">${index + 1}점</div>
+                            <div class="score-desc">${score}</div>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <label style="font-weight: 600; color: #2d3748; margin-bottom: 10px; display: block;">
+                        ${questionNumber}-1. 선택한 점수에 대한 구체적인 경험을 작성해주세요. <span class="required-indicator">*</span>
+                    </label>
+                    <textarea class="experience-input" 
+                              data-question="${question.id}" 
+                              placeholder="구체적인 경험이나 프로젝트 사례를 작성해주세요...">${existingExperience}</textarea>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function updatePageInfo() {
+            const totalPages = Math.ceil(allQuestions.length / questionsPerPage);
+            const pageInfo = document.getElementById('page-info');
+            pageInfo.textContent = `${currentPage + 1} / ${totalPages} 페이지`;
+        }
+
+        function updateNavigationButtons() {
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const totalPages = Math.ceil(allQuestions.length / questionsPerPage);
+            
+            prevBtn.disabled = currentPage === 0;
+            
+            if (currentPage === totalPages - 1) {
+                nextBtn.textContent = '결과 분석하기';
+                nextBtn.onclick = generateResults;
+            } else {
+                nextBtn.textContent = '다음';
+                nextBtn.onclick = nextPage;
+            }
+        }
+
+        function updateProgressBar() {
+            const progress = ((currentPage + 1) / Math.ceil(allQuestions.length / questionsPerPage)) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        }
+
+        function validateCurrentPage() {
+            const startIndex = currentPage * questionsPerPage;
+            const endIndex = Math.min(startIndex + questionsPerPage, allQuestions.length);
+            const currentQuestions = allQuestions.slice(startIndex, endIndex);
+            
+            let isValid = true;
+            let errorMessages = [];
+            
+            currentQuestions.forEach(question => {
+                const response = responses[question.id];
+                const scoreSelected = response && response.score;
+                const experienceWritten = response && response.experience && response.experience.trim() !== '';
+                
+                if (!scoreSelected || !experienceWritten) {
+                    isValid = false;
+                    
+                    // 에러 스타일 적용
+                    if (!scoreSelected) {
+                        document.querySelectorAll(`[data-question="${question.id}"].score-option`).forEach(opt => {
+                            opt.style.borderColor = '#e53e3e';
+                        });
+                    }
+                    
+                    if (!experienceWritten) {
+                        const experienceInput = document.querySelector(`[data-question="${question.id}"].experience-input`);
+                        if (experienceInput) {
+                            experienceInput.classList.add('error');
+                        }
+                    }
+                }
+            });
+            
+            if (!isValid) {
+                alert('1~5점 중 하나를 선택하고 선택한 점수에 대한 관련 경험에 대한 내용을 작성해주세요.');
+                return false;
+            }
+            
+            return true;
+        }
+
+        function nextPage() {
+            if (!validateCurrentPage()) {
+                return;
+            }
+            
+            const totalPages = Math.ceil(allQuestions.length / questionsPerPage);
+            if (currentPage < totalPages - 1) {
+                currentPage++;
+                displayCurrentPage();
+            }
+        }
+
+        function previousPage() {
+            if (currentPage > 0) {
+                currentPage--;
+                displayCurrentPage();
+            }
+        }
+
+        function generateResults() {
+            if (!validateCurrentPage()) {
+                return;
+            }
+            
+            const analysis = analyzeResults();
+            displayResults(analysis);
+            
+            // 화면 전환
+            document.getElementById('assessment-form').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+        }
+
+        function analyzeResults() {
+            let totalScore = 0;
+            let maxScore = 0;
+            const categoryScores = {};
+            
+            for (const [questionId, response] of Object.entries(responses)) {
+                if (response.score) {
+                    totalScore += response.score;
+                    maxScore += 5;
+                    
+                    if (!categoryScores[response.category]) {
+                        categoryScores[response.category] = { total: 0, count: 0 };
+                    }
+                    categoryScores[response.category].total += response.score;
+                    categoryScores[response.category].count += 1;
+                }
+            }
+            
+            const percentage = Math.round((totalScore / maxScore) * 100);
+            
+            return {
+                totalScore,
+                maxScore,
+                percentage,
+                categoryScores,
+                questionsCount: Object.keys(responses).length
+            };
+        }
+
+        function displayResults(analysis) {
+            const container = document.getElementById('results-content');
+            
+            let resultHTML = `
+                <div class="summary-card">
+                    <div class="summary-value">${analysis.percentage}%</div>
+                    <div class="summary-label">전체 역량 점수 (${analysis.totalScore}/${analysis.maxScore}점)</div>
+                </div>
+                
+                <h3 style="color: #5a67d8; margin-bottom: 20px;">📊 카테고리별 역량 분석</h3>
+            `;
+            
+            for (const [category, data] of Object.entries(analysis.categoryScores)) {
+                const categoryAvg = Math.round((data.total / data.count) * 100) / 100;
+                resultHTML += `
+                    <div class="skill-item">
+                        <div class="skill-name">${category}</div>
+                        <div class="skill-score">${categoryAvg}/5점</div>
+                    </div>
+                `;
+            }
+            
+            // 개선 권장사항 생성
+            resultHTML += generateRecommendations(analysis);
+            
+            container.innerHTML = resultHTML;
+        }
+
+        function generateRecommendations(analysis) {
+            let recommendations = [];
+            
+            // 점수 기반 권장사항
+            if (analysis.percentage < 40) {
+                recommendations.push('기본적인 개발 역량 습득을 위한 체계적인 학습이 필요합니다.');
+                recommendations.push('온라인 강의나 부트캠프를 통한 기초 역량 강화를 권장합니다.');
+            } else if (analysis.percentage < 60) {
+                recommendations.push('실무 프로젝트 경험을 늘려 실전 역량을 향상시키세요.');
+                recommendations.push('코드 리뷰나 페어 프로그래밍을 통해 코드 품질을 개선하세요.');
+            } else if (analysis.percentage < 80) {
+                recommendations.push('고급 기술 스택 학습과 아키텍처 설계 경험을 쌓으세요.');
+                recommendations.push('팀 내에서 기술적 리더십을 발휘할 기회를 찾아보세요.');
+            } else {
+                recommendations.push('전문성을 바탕으로 조직 내 기술 표준화를 주도하세요.');
+                recommendations.push('외부 커뮤니티나 오픈소스 기여를 통해 영향력을 확장하세요.');
+            }
+            
+            // 카테고리별 권장사항
+            for (const [category, data] of Object.entries(analysis.categoryScores)) {
+                const categoryAvg = data.total / data.count;
+                if (categoryAvg < 3) {
+                    recommendations.push(`${category} 영역의 기본기 강화가 필요합니다.`);
+                }
+            }
+            
+            return `
+                <div class="recommendations">
+                    <h3>💡 개선 권장사항</h3>
+                    <ul>
+                        ${recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+
+        function restart() {
+            selectedJob = '';
+            responses = {};
+            allQuestions = [];
+            currentPage = 0;
+            
+            // 직무 선택 초기화
+            document.querySelectorAll('.job-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // 버튼 상태 초기화
+            updateStartButton();
+            
+            // 화면 전환
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('assessment-form').style.display = 'none';
+            document.getElementById('job-selection').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
